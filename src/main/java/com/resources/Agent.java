@@ -8,7 +8,6 @@ public class Agent {
 	//constants
 	public static final String AGENT_ID = "agentId";
 	public static final String AGENT_NAME = "agentName";
-	public static final String AGENT_MANAGER = "agentManager";
 	
 	@DatabaseField(generatedId = true, columnName = AGENT_ID)
 	private int agentId;
