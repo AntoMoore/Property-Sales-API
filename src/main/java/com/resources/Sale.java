@@ -16,7 +16,7 @@ public class Sale {
 	@DatabaseField(generatedId = true, columnName = SALE_ID)
 	private int saleId;
 	
-	@DatabaseField(canBeNull = false, dataType = DataType.DATE_STRING)
+	@DatabaseField(canBeNull = false, dataType = DataType.DATE)
 	private Date saleDate;
 	
 	@DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh = true, columnName = SALE_PROPERTY)

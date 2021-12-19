@@ -24,7 +24,7 @@ public class Property {
 	@DatabaseField(canBeNull = false, columnName = PROPERTY_VALUE)
 	private float propertyValue;
 	
-	@DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh = true, columnName = PROPERTY_VALUE)
+	@DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh = true, columnName = PROPERTY_AGENT)
 	private Agent propertyAgent;
 	
 	public Property() {
