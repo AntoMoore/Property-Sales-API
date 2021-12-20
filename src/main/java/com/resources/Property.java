@@ -8,7 +8,7 @@ public class Property {
 	//constants
 	public static final String PROPERTY_ID = "propertyId";
 	public static final String PROPERTY_TYPE = "propertyType";
-	public static final String PROPERTY_ROOMS = "propertyRooms";
+	public static final String PROPERTY_ADDRESS = "propertyAddress";
 	public static final String PROPERTY_VALUE = "propertyValue";
 	public static final String PROPERTY_AGENT = "propertyAgent";
 
@@ -18,8 +18,8 @@ public class Property {
 	@DatabaseField(canBeNull = false, columnName = PROPERTY_TYPE)
 	private String propertyType;
 	
-	@DatabaseField(canBeNull = false, columnName = PROPERTY_ROOMS)
-	private int propertyRooms;
+	@DatabaseField(canBeNull = false, columnName = PROPERTY_ADDRESS)
+	private String propertyAddress;
 	
 	@DatabaseField(canBeNull = false, columnName = PROPERTY_VALUE)
 	private float propertyValue;
@@ -47,12 +47,12 @@ public class Property {
 		this.propertyType = propertyType;
 	}
 
-	public int getPropertyRooms() {
-		return propertyRooms;
+	public String getPropertyAddress() {
+		return propertyAddress;
 	}
 
-	public void setPropertyRooms(int propertyRooms) {
-		this.propertyRooms = propertyRooms;
+	public void setPropertyAddress(String propertyAddress) {
+		this.propertyAddress = propertyAddress;
 	}
 
 	public float getPropertyValue() {
@@ -73,7 +73,7 @@ public class Property {
 
 	@Override
 	public String toString() {
-		return "Property [propertyId=" + propertyId + ", propertyType=" + propertyType + ", propertyRooms="
-				+ propertyRooms + ", propertyValue=" + propertyValue + ", propertyAgent=" + propertyAgent + "]";
+		return "Property [propertyId=" + getPropertyId() + ", propertyType=" + getPropertyType() + ", propertyAddress="
+				+ getPropertyAddress() + ", propertyValue=" + getPropertyValue() + ", propertyAgent=" + getPropertyAgent() + "]";
 	}
 }

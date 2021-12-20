@@ -49,6 +49,6 @@ public class Agent {
 
 	@Override
 	public String toString() {
-		return "Agent [agentId=" + agentId + ", agentName=" + agentName + ", agentCommission=" + agentCommission + "]";
+		return "Agent [agentId=" + getAgentId() + ", agentName=" + getAgentName() + ", agentCommission=" + getAgentCommission() + "]";
 	}
 }

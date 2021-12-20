@@ -14,7 +14,8 @@ import com.resources.Sale;
 public class DatabaseController {
 	//constants
 	private static final String CLASS_NAME = "org.sqlite.JDBC";
-	private static final String DATABASE_URL = "jdbc:sqlite:property_sales_data.db";
+	private static final String PRODUCTION_DATABASE_URL = "jdbc:sqlite:property_sales_data.db";
+	private static final String TEST_DATABASE_URL = "jdbc:sqlite:test_data.db";
 
 	//member variables
 	private static DatabaseController database_controller_instance = null;
@@ -35,10 +36,21 @@ public class DatabaseController {
 		return database_controller_instance;
 	}
 
-	public void connect() {
+	public void connect(String type) {
 		try {
 			Class.forName(CLASS_NAME);
-			connectionSource = new JdbcConnectionSource(DATABASE_URL);
+			
+			if(type.equalsIgnoreCase("TEST")) {
+				connectionSource = new JdbcConnectionSource(TEST_DATABASE_URL);
+			} 
+			else if(type.equalsIgnoreCase("PRODUCTION")){
+				connectionSource = new JdbcConnectionSource(PRODUCTION_DATABASE_URL);
+			}
+			else {
+				System.out.println("Invalid Connection Type...");
+				return;
+			}
+			
 
 			//create database tables if empty
 			TableUtils.createTableIfNotExists(connectionSource, Agent.class);

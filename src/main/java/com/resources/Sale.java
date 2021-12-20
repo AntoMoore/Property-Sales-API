@@ -52,6 +52,6 @@ public class Sale {
 
 	@Override
 	public String toString() {
-		return "Sale [saleId=" + saleId + ", saleDate=" + saleDate + ", saleProperty=" + saleProperty + "]";
+		return "Sale [saleId=" + getSaleId() + ", saleDate=" + getSaleDate() + ", saleProperty=" + getSaleProperty() + "]";
 	}
 }

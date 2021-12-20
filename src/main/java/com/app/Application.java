@@ -9,11 +9,13 @@ import com.resources.Property;
 import com.resources.Sale;
 
 public class Application {
+	//constants
+	public static final String CONNECTION_TYPE = "PRODUCTION";
 
 	public static void main(String[] args) throws SQLException {
 		//database controller
 		DatabaseController databaseController = DatabaseController.getInstance();
-		databaseController.connect();
+		databaseController.connect(CONNECTION_TYPE);
 
 		//create Agent
 		Agent a1 = new Agent();
@@ -26,7 +28,7 @@ public class Application {
 		Agent a2 = databaseController.getAgentDao().queryForId("1");
 		Property p1 = new Property();
 		p1.setPropertyType("House");
-		p1.setPropertyRooms(3);
+		p1.setPropertyAddress("123 Fake Street");
 		p1.setPropertyValue(100000.00f);
 		p1.setPropertyAgent(a2);
 		databaseController.getPropertyDao().create(p1);
