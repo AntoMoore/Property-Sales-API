@@ -1,4 +1,4 @@
-package com.unitTesting;
+package com.tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -53,7 +53,7 @@ public class TestResources {
 	}
 	
 	@Test
-	@Order(2)
+	@Order(3)
 	void testSale() {
 		//create Agent
 		Agent agent = new Agent();
@@ -75,8 +75,6 @@ public class TestResources {
 		sale.setSaleId(1);
 		sale.setSaleDate(date);
 		sale.setSaleProperty(property);
-		
-		System.out.println("DATE: " + date);
 		
 		//test
 		String expected = "Sale [saleId=1, saleDate=" + date + ", saleProperty=Property [propertyId=2, "

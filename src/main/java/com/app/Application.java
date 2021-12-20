@@ -10,7 +10,7 @@ import com.resources.Sale;
 
 public class Application {
 	//constants
-	public static final String CONNECTION_TYPE = "PRODUCTION";
+	public static final String CONNECTION_TYPE = "PRODUCTION"; // (production/test)
 
 	public static void main(String[] args) throws SQLException {
 		//database controller
@@ -35,9 +35,10 @@ public class Application {
 		System.out.println("Created Property: " + p1.toString());
 		
 		//create Sale
+		Date date = new Date();
 		Property p2 = databaseController.getPropertyDao().queryForId("1");
 		Sale s1 = new Sale();
-		s1.setSaleDate(new Date());
+		s1.setSaleDate(date);
 		s1.setSaleProperty(p2);
 		databaseController.getSaleDao().create(s1);
 		System.out.println("Created Sale: " + s1.toString());

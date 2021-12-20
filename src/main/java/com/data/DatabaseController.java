@@ -36,14 +36,14 @@ public class DatabaseController {
 		return database_controller_instance;
 	}
 
-	public void connect(String type) {
+	public void connect(String connectionType) {
 		try {
 			Class.forName(CLASS_NAME);
 			
-			if(type.equalsIgnoreCase("TEST")) {
+			if(connectionType.equalsIgnoreCase("TEST")) {
 				connectionSource = new JdbcConnectionSource(TEST_DATABASE_URL);
 			} 
-			else if(type.equalsIgnoreCase("PRODUCTION")){
+			else if(connectionType.equalsIgnoreCase("PRODUCTION")){
 				connectionSource = new JdbcConnectionSource(PRODUCTION_DATABASE_URL);
 			}
 			else {
@@ -51,7 +51,6 @@ public class DatabaseController {
 				return;
 			}
 			
-
 			//create database tables if empty
 			TableUtils.createTableIfNotExists(connectionSource, Agent.class);
 			TableUtils.createTableIfNotExists(connectionSource, Property.class);
