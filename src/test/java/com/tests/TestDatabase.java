@@ -110,6 +110,4 @@ public class TestDatabase {
 		assertEquals(expected, actual);
 
 	}
-
-
 }
