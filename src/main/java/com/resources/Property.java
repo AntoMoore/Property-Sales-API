@@ -4,7 +4,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "properties")
-public class Property {
+public class Property implements Resource{
 	//constants
 	public static final String PROPERTY_ID = "propertyId";
 	public static final String PROPERTY_TYPE = "propertyType";
@@ -75,5 +75,10 @@ public class Property {
 	public String toString() {
 		return "Property [propertyId=" + getPropertyId() + ", propertyType=" + getPropertyType() + ", propertyAddress="
 				+ getPropertyAddress() + ", propertyValue=" + getPropertyValue() + ", propertyAgent=" + getPropertyAgent() + "]";
+	}
+
+	@Override
+	public Class<? extends Resource> getResouce() {
+		return this.getClass();
 	}
 }

@@ -12,12 +12,14 @@ import org.junit.jupiter.api.Test;
 import com.data.DatabaseController;
 import com.resources.Agent;
 import com.resources.Property;
+import com.resources.ResourceFactory;
 import com.resources.Sale;
 
 public class TestDatabase {
-	// connection type and reference
+	
 	private static final String CONNECTION_TYPE = "TEST"; // (production/test)
 	private static DatabaseController databaseController = DatabaseController.getInstance();
+	private static ResourceFactory resourceFactory = new ResourceFactory();
 
 	@BeforeAll
 	public static void startTestConnection() {
@@ -28,7 +30,7 @@ public class TestDatabase {
 	@Order(1)
 	void testCreateAgent() throws SQLException {
 		//create Agent
-		Agent agent = new Agent();
+		Agent agent = (Agent)resourceFactory.getResource("agent");
 		agent.setAgentName("TestAgent1");
 		agent.setAgentCommission(0.5f);
 		databaseController.getAgentDao().create(agent);
@@ -47,13 +49,13 @@ public class TestDatabase {
 	@Order(2)
 	void testCreateProperty() throws SQLException {
 		//create Agent
-		Agent agent = new Agent();
+		Agent agent = (Agent)resourceFactory.getResource("agent");
 		agent.setAgentName("TestAgent2");
 		agent.setAgentCommission(0.6f);
 		databaseController.getAgentDao().create(agent);
 
 		//create Property
-		Property property = new Property();
+		Property property = (Property)resourceFactory.getResource("property");
 		property.setPropertyType("Test Lab");
 		property.setPropertyAddress("002 Test");
 		property.setPropertyValue(100000.00f);
@@ -76,13 +78,13 @@ public class TestDatabase {
 	@Test
 	void testCreateSale() throws SQLException {
 		//create Agent
-		Agent agent = new Agent();
+		Agent agent = (Agent)resourceFactory.getResource("agent");
 		agent.setAgentName("TestAgent3");
 		agent.setAgentCommission(0.7f);
 		databaseController.getAgentDao().create(agent);
 
 		//create Property
-		Property property = new Property();
+		Property property = (Property)resourceFactory.getResource("property");
 		property.setPropertyType("Test Lab");
 		property.setPropertyAddress("003 Test");
 		property.setPropertyValue(80000.00f);
@@ -91,7 +93,7 @@ public class TestDatabase {
 		
 		//create sale
 		Date date = new Date();
-		Sale sale = new Sale();
+		Sale sale = (Sale)resourceFactory.getResource("sale");
 		sale.setSaleDate(date);
 		sale.setSaleProperty(property);
 		databaseController.getSaleDao().create(sale);

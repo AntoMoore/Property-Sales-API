@@ -4,7 +4,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "agents")
-public class Agent {
+public class Agent implements Resource{
 	//constants
 	public static final String AGENT_ID = "agentId";
 	public static final String AGENT_NAME = "agentName";
@@ -50,5 +50,10 @@ public class Agent {
 	@Override
 	public String toString() {
 		return "Agent [agentId=" + getAgentId() + ", agentName=" + getAgentName() + ", agentCommission=" + getAgentCommission() + "]";
+	}
+
+	@Override
+	public Class<? extends Resource> getResouce() {
+		return this.getClass();
 	}
 }

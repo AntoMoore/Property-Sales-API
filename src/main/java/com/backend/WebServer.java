@@ -3,15 +3,20 @@ package com.backend;
 import com.data.DatabaseController;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.resources.Agent;
+//import com.resources.ResourceFactory;
 
 import static spark.Spark.get;
+
+import java.util.Map;
+import java.util.TreeMap;
+
 import spark.Spark;
 
 public class WebServer {
 	// connection type and reference
 	public static final String CONNECTION_TYPE = "PRODUCTION"; // (production/test)
 	private static DatabaseController databaseController = DatabaseController.getInstance();
+	//private static ResourceFactory resourceFactory = new ResourceFactory();
 
 	public void startWebServer() {
 		//connect to database
@@ -20,27 +25,22 @@ public class WebServer {
 		// === HTTP ROUTES ====
 
 		// GET status 
-		get("/status", (req, res) -> {
-			res.status(200);
-			//String serverStatus = "status: " + res.status();
+		get("/openproperty/status", (request, response) -> {
+			response.status(200);
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
-			return gson.toJson("status: " + res.status());
+			return gson.toJson("status: " + response.status());
 		});
 
-		// GET Sensor by ID
-		get("/agent/:id", (req, res) -> {
-			// search by primary key
-			Agent agent = databaseController.getAgentDao().queryForId("1");
-
-			if (agent != null) {
-				res.status(200);
-				Gson gson = new GsonBuilder().setPrettyPrinting().create();
-				return gson.toJson(agent);
-			} else {
-				res.status(400);
-				Gson gson = new GsonBuilder().setPrettyPrinting().create();
-				return gson.toJson("error: Agent not found");
-			}	
+		// GET request using wildcard value
+		get("/openproperty/api/*", (request, res) -> {
+			Map<String, String[]> map = new TreeMap<>();
+			map = request.queryMap().toMap();
+			System.out.println("Number of Params: " + map.size());
+			
+			String resValue = request.queryMap().get("resource").value();
+			String resId = request.queryMap().get("id").value();
+			
+			return "param-1: " + resValue + "param-2:" + resId;
 		});	
 
 	}
