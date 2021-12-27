@@ -1,27 +1,21 @@
 package com.backend;
 
-import com.data.DatabaseController;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.resources.Resource;
 
 import static spark.Spark.get;
+import static spark.Spark.post;
 import spark.Spark;
 
 import java.util.List;
 
 public class WebServer {
-	// connection type and reference
-	public static final String CONNECTION_TYPE = "PRODUCTION"; // (production/test)
-	private static DatabaseController databaseController = DatabaseController.getInstance();
-	private RequestController requestController = new RequestController();
-	//private static ResourceFactory resourceFactory = new ResourceFactory();
 
 	public void startWebServer() {
 		//connect to database
-		databaseController.connect(CONNECTION_TYPE);
-
-		// === HTTP ROUTES ====
+		RequestController requestController = new RequestController();
+		requestController.connectDatabase();
 
 		// GET status 
 		get("/openproperty/status", (request, response) -> {
@@ -32,7 +26,7 @@ public class WebServer {
 
 		// GET agents using wildcard value
 		get("/openproperty/agents/*", (request, response) -> {
-			List<Resource> list = requestController.getAgentRequest(databaseController, request, response);
+			List<Resource> list = requestController.getAgentRequest(request);
 			response.status(200);
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
 			return gson.toJson(list);
@@ -40,7 +34,7 @@ public class WebServer {
 
 		// GET properties using wildcard value
 		get("/openproperty/properties/*", (request, response) -> {
-			List<Resource> list = requestController.getPropertyRequest(databaseController, request, response);
+			List<Resource> list = requestController.getPropertyRequest(request);
 			response.status(200);
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
 			return gson.toJson(list);
@@ -48,16 +42,41 @@ public class WebServer {
 
 		// GET sales using wildcard value
 		get("/openproperty/sales/*", (request, response) -> {
-			List<Resource> list = requestController.getSaleRequest(databaseController, request, response);
+			List<Resource> list = requestController.getSaleRequest(request);
 			response.status(200);
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
 			return gson.toJson(list);
 		});	
 
+		// POST agent
+		post("/openproperty/agents", (request, response) -> {
+			requestController.postAgentRequest(request);
+			response.status(201);
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			return gson.toJson("status: " + response.status());
+		});
+
+		// POST property
+		post("/openproperty/properties", (request, response) -> {
+			requestController.postPropertyRequest(request);
+			response.status(201);
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			return gson.toJson("status: " + response.status());
+		});
+
+		// POST property
+		post("/openproperty/sales", (request, response) -> {
+			requestController.postSaleRequest(request);
+			response.status(201);
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			return gson.toJson("status: " + response.status());
+		});
+
 	}
 
 	public void stopWebServer() {
 		System.out.println("Stopping Server...");
-		Spark.stop();	}
+		Spark.stop();	
+	}
 
 }

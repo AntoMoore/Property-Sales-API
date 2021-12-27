@@ -2,6 +2,7 @@ package com.backend;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.data.DatabaseController;
@@ -14,23 +15,29 @@ import com.resources.Resource;
 import com.resources.Sale;
 
 import spark.Request;
-import spark.Response;
 
 public class RequestController {
+	
+	public static final String CONNECTION_TYPE = "PRODUCTION"; // (production/test)
+	private static DatabaseController databaseController = DatabaseController.getInstance();
+	
+	public void connectDatabase() {
+		databaseController.connect(CONNECTION_TYPE);
+	}
 
-	public List<Resource> getAgentRequest(DatabaseController db, Request req, Response res) throws SQLException {
+	public List<Resource> getAgentRequest(Request req) throws SQLException {
 		List<Resource> list = new ArrayList<>();
 		int paramaters = req.queryMap().toMap().size();
 
 		if(paramaters == 0) {
 			// no parameters (return all agents)
-			List<Agent> agents = db.getAgentDao().queryForAll();
+			List<Agent> agents = databaseController.getAgentDao().queryForAll();
 			for(Agent a : agents)
 				list.add(a);
 		}
 		else if(paramaters == 1) {
 			//Query Builder
-			QueryBuilder<Agent, String> agentQuery = db.getAgentDao().queryBuilder();
+			QueryBuilder<Agent, String> agentQuery = databaseController.getAgentDao().queryBuilder();
 			Where<Agent, String> where = agentQuery.where();
 
 			// query parameters
@@ -43,7 +50,7 @@ public class RequestController {
 
 			//prepared statement
 			PreparedQuery<Agent> prepQuery = agentQuery.prepare();
-			List<Agent> agents = db.getAgentDao().query(prepQuery);
+			List<Agent> agents = databaseController.getAgentDao().query(prepQuery);
 			for(Agent a : agents)
 				list.add(a);
 		}
@@ -51,19 +58,19 @@ public class RequestController {
 		return list;	
 	}
 
-	public List<Resource> getPropertyRequest(DatabaseController db, Request req, Response res) throws SQLException{
+	public List<Resource> getPropertyRequest(Request req) throws SQLException{
 		List<Resource> list = new ArrayList<>();
 		int paramaters = req.queryMap().toMap().size();
 
 		if(paramaters == 0) {
 			// no parameters (return all properties)
-			List<Property> properties = db.getPropertyDao().queryForAll();
+			List<Property> properties = databaseController.getPropertyDao().queryForAll();
 			for(Property p : properties)
 				list.add(p);
 		}
 		else if(paramaters == 1) {
 			//Query Builder
-			QueryBuilder<Property, String> propertyQuery = db.getPropertyDao().queryBuilder();
+			QueryBuilder<Property, String> propertyQuery = databaseController.getPropertyDao().queryBuilder();
 			Where<Property, String> where = propertyQuery.where();
 
 			// query parameters
@@ -76,7 +83,7 @@ public class RequestController {
 
 			//prepared statement
 			PreparedQuery<Property> prepQuery = propertyQuery.prepare();
-			List<Property> properties = db.getPropertyDao().query(prepQuery);
+			List<Property> properties = databaseController.getPropertyDao().query(prepQuery);
 			for(Property p : properties)
 				list.add(p);
 		}
@@ -84,19 +91,19 @@ public class RequestController {
 		return list;
 	}
 
-	public List<Resource> getSaleRequest(DatabaseController db, Request req, Response res) throws SQLException{
+	public List<Resource> getSaleRequest(Request req) throws SQLException{
 		List<Resource> list = new ArrayList<>();
 		int paramaters = req.queryMap().toMap().size();
 
 		if(paramaters == 0) {
 			// no parameters (return all properties)
-			List<Sale> sales = db.getSaleDao().queryForAll();
+			List<Sale> sales = databaseController.getSaleDao().queryForAll();
 			for(Sale s : sales)
 				list.add(s);
 		}
 		else if(paramaters == 1) {
 			//Query Builder
-			QueryBuilder<Sale, String> propertyQuery = db.getSaleDao().queryBuilder();
+			QueryBuilder<Sale, String> propertyQuery = databaseController.getSaleDao().queryBuilder();
 			Where<Sale, String> where = propertyQuery.where();
 
 			// query parameters
@@ -109,12 +116,43 @@ public class RequestController {
 
 			//prepared statement
 			PreparedQuery<Sale> prepQuery = propertyQuery.prepare();
-			List<Sale> sales = db.getSaleDao().query(prepQuery);
+			List<Sale> sales = databaseController.getSaleDao().query(prepQuery);
 			for(Sale s : sales)
 				list.add(s);
 		}
 
 		return list;
 	}
-
+	
+	public void postAgentRequest(Request req) throws SQLException {
+		// create new agent
+		Agent agent = new Agent();
+		agent.setAgentName(req.queryParams("name"));
+		agent.setAgentCommission(Float.valueOf(req.queryParams("commission")).floatValue());
+		
+		// add to database
+		databaseController.getAgentDao().create(agent);
+	}
+	
+	public void postPropertyRequest(Request req) throws SQLException {
+		// create new property
+		Property property = new Property();
+		property.setPropertyType(req.queryParams("type"));
+		property.setPropertyAddress(req.queryParams("address"));
+		property.setPropertyValue(Float.valueOf(req.queryParams("value")).floatValue());
+		property.setPropertyAgent(databaseController.getAgentDao().queryForId(req.queryParams("agentId")));
+		
+		// add to database
+		databaseController.getPropertyDao().create(property);
+	}
+	
+	public void postSaleRequest(Request req) throws SQLException {
+		// create new sale
+		Sale sale = new Sale();
+		sale.setSaleDate(new Date());
+		sale.setSaleProperty(databaseController.getPropertyDao().queryForId(req.queryParams("propertyId")));
+		
+		// add to database
+		databaseController.getSaleDao().create(sale);
+	}
 }
