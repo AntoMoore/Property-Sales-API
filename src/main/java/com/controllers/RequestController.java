@@ -1,17 +1,18 @@
-package com.backend;
+package com.controllers;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import com.data.DatabaseController;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 import com.resources.Agent;
 import com.resources.Property;
 import com.resources.Resource;
+import com.resources.ResourceFactory;
 import com.resources.Sale;
 
 import spark.Request;
@@ -19,7 +20,8 @@ import spark.Request;
 public class RequestController {
 	
 	public static final String CONNECTION_TYPE = "PRODUCTION"; // (production/test)
-	private static DatabaseController databaseController = DatabaseController.getInstance();
+	private DatabaseController databaseController = DatabaseController.getInstance();
+	private ResourceFactory resourceFactory = new ResourceFactory();
 	
 	public void connectDatabase() {
 		databaseController.connect(CONNECTION_TYPE);
@@ -103,19 +105,46 @@ public class RequestController {
 		}
 		else if(paramaters == 1) {
 			//Query Builder
-			QueryBuilder<Sale, String> propertyQuery = databaseController.getSaleDao().queryBuilder();
-			Where<Sale, String> where = propertyQuery.where();
+			QueryBuilder<Sale, String> saleQuery = databaseController.getSaleDao().queryBuilder();
+			Where<Sale, String> where = saleQuery.where();
 
 			// query parameters
 			if(req.queryParams().toString().contains("id"))
 				where.eq(Sale.SALE_ID, req.queryMap().get("id").value());
 			else if(req.queryParams().toString().contains("date")) {
-				// Need to add date checking
-				// where.eq(Sale.SALE_DATE, req.queryMap().get("date").value());
+				// get current time/date
+				Date date = new Date();
+				Calendar calender = Calendar.getInstance();
+				calender.setTime(date);
+				
+				//check for: day, week, month or year
+				String paramater = req.queryMap().get("date").value().toUpperCase();
+				if(paramater.equals("DAY"))
+					calender.add(Calendar.DAY_OF_YEAR, -1);
+				else if(paramater.equals("WEEK"))
+					calender.add(Calendar.WEEK_OF_YEAR, -1);
+				else if(paramater.equals("MONTH"))
+					calender.add(Calendar.MONTH, -1);
+				else if(paramater.equals("YEAR"))
+					calender.add(Calendar.YEAR, -1);
+				
+				// set target date and query
+				date = calender.getTime();
+				where.between(Sale.SALE_DATE, date, new Date());
+			}
+			else if(req.queryParams().toString().contains("agent")) {
+				List<Sale> sales = databaseController.getSaleDao().queryForAll();
+				int agentId = Integer.parseInt(req.queryMap().get("agent").value());
+				for(Sale s : sales) {
+					if(s.getSaleProperty().getPropertyAgent().getAgentId() == agentId) {
+						list.add(s);
+					}
+				}
+				return list;
 			}
 
 			//prepared statement
-			PreparedQuery<Sale> prepQuery = propertyQuery.prepare();
+			PreparedQuery<Sale> prepQuery = saleQuery.prepare();
 			List<Sale> sales = databaseController.getSaleDao().query(prepQuery);
 			for(Sale s : sales)
 				list.add(s);
@@ -126,7 +155,7 @@ public class RequestController {
 	
 	public void postAgentRequest(Request req) throws SQLException {
 		// create new agent
-		Agent agent = new Agent();
+		Agent agent = (Agent)resourceFactory.getResource("agent");
 		agent.setAgentName(req.queryParams("name"));
 		agent.setAgentCommission(Float.valueOf(req.queryParams("commission")).floatValue());
 		
@@ -136,7 +165,7 @@ public class RequestController {
 	
 	public void postPropertyRequest(Request req) throws SQLException {
 		// create new property
-		Property property = new Property();
+		Property property = (Property)resourceFactory.getResource("property");
 		property.setPropertyType(req.queryParams("type"));
 		property.setPropertyAddress(req.queryParams("address"));
 		property.setPropertyValue(Float.valueOf(req.queryParams("value")).floatValue());
@@ -148,7 +177,7 @@ public class RequestController {
 	
 	public void postSaleRequest(Request req) throws SQLException {
 		// create new sale
-		Sale sale = new Sale();
+		Sale sale = (Sale)resourceFactory.getResource("sale");
 		sale.setSaleDate(new Date());
 		sale.setSaleProperty(databaseController.getPropertyDao().queryForId(req.queryParams("propertyId")));
 		

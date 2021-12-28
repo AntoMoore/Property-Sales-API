@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
-import com.data.DatabaseController;
+import com.controllers.DatabaseController;
 import com.resources.Agent;
 import com.resources.Property;
 import com.resources.ResourceFactory;
@@ -19,7 +19,7 @@ public class TestDatabase {
 	
 	private static final String CONNECTION_TYPE = "TEST"; // (production/test)
 	private static DatabaseController databaseController = DatabaseController.getInstance();
-	private static ResourceFactory resourceFactory = new ResourceFactory();
+	private ResourceFactory resourceFactory = new ResourceFactory();
 
 	@BeforeAll
 	public static void startTestConnection() {
