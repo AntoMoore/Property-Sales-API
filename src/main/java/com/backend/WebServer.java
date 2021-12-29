@@ -7,6 +7,7 @@ import com.resources.Resource;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
+import static spark.Spark.delete;
 import spark.Spark;
 
 import java.util.List;
@@ -69,6 +70,30 @@ public class WebServer {
 		post("/openproperty/sales", (request, response) -> {
 			requestController.postSaleRequest(request);
 			response.status(201);
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			return gson.toJson("status: " + response.status());
+		});
+
+		// DELETE agent
+		delete("/openproperty/agents/remove/", (request, response) -> {
+			requestController.deleteAgentRequest(request);
+			response.status(200);
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			return gson.toJson("status: " + response.status());
+		});
+
+		// DELETE property
+		delete("/openproperty/properties/remove/", (request, response) -> {
+			requestController.deletePropertyRequest(request);
+			response.status(200);
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			return gson.toJson("status: " + response.status());
+		});
+
+		// DELETE sale
+		delete("/openproperty/sales/remove/", (request, response) -> {
+			requestController.deleteSaleRequest(request);
+			response.status(200);
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
 			return gson.toJson("status: " + response.status());
 		});

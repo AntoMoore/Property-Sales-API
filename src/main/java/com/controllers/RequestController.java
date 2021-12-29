@@ -48,7 +48,7 @@ public class RequestController {
 			else if(req.queryParams().toString().contains("name"))
 				where.eq(Agent.AGENT_NAME, req.queryMap().get("name").value());
 			else if(req.queryParams().toString().contains("commission"))
-				where.eq(Agent.AGENT_COMMISSION, req.queryMap().get("commission").value());
+				where.le(Agent.AGENT_COMMISSION, req.queryMap().get("commission").value());
 
 			//prepared statement
 			PreparedQuery<Agent> prepQuery = agentQuery.prepare();
@@ -78,10 +78,10 @@ public class RequestController {
 			// query parameters
 			if(req.queryParams().toString().contains("id"))
 				where.eq(Property.PROPERTY_ID, req.queryMap().get("id").value());
-			else if(req.queryParams().toString().contains("name"))
+			else if(req.queryParams().toString().contains("type"))
 				where.eq(Property.PROPERTY_TYPE, req.queryMap().get("type").value());
 			else if(req.queryParams().toString().contains("value"))
-				where.eq(Property.PROPERTY_VALUE, req.queryMap().get("value").value());
+				where.le(Property.PROPERTY_VALUE, req.queryMap().get("value").value());
 
 			//prepared statement
 			PreparedQuery<Property> prepQuery = propertyQuery.prepare();
@@ -183,5 +183,17 @@ public class RequestController {
 		
 		// add to database
 		databaseController.getSaleDao().create(sale);
+	}
+	
+	public void deleteAgentRequest(Request req) throws SQLException {
+		databaseController.getAgentDao().deleteById(req.queryParams("id"));
+	}
+	
+	public void deletePropertyRequest(Request req) throws SQLException {
+		databaseController.getPropertyDao().deleteById(req.queryParams("id"));
+	}
+	
+	public void deleteSaleRequest(Request req) throws SQLException {
+		databaseController.getSaleDao().deleteById(req.queryParams("id"));
 	}
 }

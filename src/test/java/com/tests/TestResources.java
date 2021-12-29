@@ -4,14 +4,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Date;
 
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import com.resources.Agent;
 import com.resources.Property;
 import com.resources.ResourceFactory;
 import com.resources.Sale;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestResources {
 
 	private static ResourceFactory resourceFactory = new ResourceFactory();

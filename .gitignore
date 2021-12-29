@@ -38,3 +38,6 @@ local.properties
 .settings/
 .loadpath
 /target/
+
+# Database files
+db.sqlite3

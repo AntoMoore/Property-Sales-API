@@ -5,9 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.sql.SQLException;
 import java.util.Date;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import com.controllers.DatabaseController;
 import com.resources.Agent;
@@ -15,6 +18,7 @@ import com.resources.Property;
 import com.resources.ResourceFactory;
 import com.resources.Sale;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestDatabase {
 	
 	private static final String CONNECTION_TYPE = "TEST"; // (production/test)
@@ -76,6 +80,7 @@ public class TestDatabase {
 	}
 
 	@Test
+	@Order(3)
 	void testCreateSale() throws SQLException {
 		//create Agent
 		Agent agent = (Agent)resourceFactory.getResource("agent");
@@ -110,6 +115,11 @@ public class TestDatabase {
 				+ "agentName=TestAgent3, agentCommission=0.7]]]";
 		String actual = queryResult.toString();
 		assertEquals(expected, actual);
-
 	}
+	
+	@AfterAll
+	public static void tearDown() throws SQLException {
+		databaseController.clearTables();
+	}
+	
 }

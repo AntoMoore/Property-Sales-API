@@ -68,9 +68,6 @@ public class DatabaseController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		// connected to database
-		System.out.println("Connection Successful.....");	
 	}
 
 	public Dao<Agent, String> getAgentDao() {
@@ -83,6 +80,12 @@ public class DatabaseController {
 	
 	public Dao<Sale, String> getSaleDao() {
 		return saleDao;
+	}
+	
+	public void clearTables() throws SQLException {
+		TableUtils.dropTable(connectionSource, Agent.class, true);
+		TableUtils.dropTable(connectionSource, Property.class, true);
+		TableUtils.dropTable(connectionSource, Sale.class, true);
 	}
 
 }
