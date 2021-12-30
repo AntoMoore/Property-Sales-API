@@ -27,75 +27,85 @@ The unit and integration tests are implemented using JUnit and are provided in t
 
 ## Example API Calls
 
-#### GET Server Status
+### GET Server Status
 ```bash
 http://localhost:4567/openproperty/status
-
-Returns: Status Code
 ```
+Returns: Status Code 
 
-#### POST Agent
+</br>
+
+### POST Agent
 ```bash
 http://localhost:4567/openproperty/agents?name=John Doe&commission=0.5
-
-Returns: Status Code
 ```
+Returns: Status Code 
 
-#### GET Agents (No Paramaters)
+<br>
+
+### GET Agents (No Paramaters)
 ```bash
 http://localhost:4567/openproperty/agents/
-
-Returns: All Agents
 ```
+Returns: All Agents
 
-#### GET Agents using ID Parameter
+<br>
+
+### GET Agents using ID Parameter
 ```bash
 http://localhost:4567/openproperty/agents/?id=1
-
-Returns: Agent with matching ID
 ```
+Returns: Agent with matching ID
 
-#### POST Property
+<br>
+
+### POST Property
 ```bash
 http://localhost:4567/openproperty/properties?type=House&address=123 Fake Street&value=95000.00&agentId=1
-
-Returns: Status Code
 ```
+Returns: Status Code
 
-#### GET Properties (No Paramaters)
+<br>
+
+### GET Properties (No Paramaters)
 ```bash
 http://localhost:4567/openproperty/properties/
-
-Returns: All Properties
 ```
+Returns: All Properties
 
-#### GET Properties using Value Parameter
+<br>
+
+### GET Properties using Value Parameter
 ```bash
 http://localhost:4567/openproperty/properties/?value=95000
-
-Returns: All Properties that are less than the given value
 ```
+Returns: All Properties that are less than or equal to the given value
 
-#### POST Sale
+<br>
+
+### POST Sale
 ```bash
 http://localhost:4567/openproperty/sales?propertyId=1
-
-Returns: Status Code
 ```
+Returns: Status Code
 
-#### GET Sales (No Paramaters)
+<br>
+
+### GET Sales (No Paramaters)
 ```bash
 http://localhost:4567/openproperty/sales/
-
-Returns: All Sales
 ```
+Returns: All Sales
 
-#### GET Sales using Date Parameter
+<br>
+
+### GET Sales using Date Parameter
 ```bash
 http://localhost:4567/openproperty/sales/?date=year
-
-Returns: All Sales made within the previous year
 ```
+Returns: All Sales made within the previous year
+
+<br>
 
 ## Technology Stack
 
