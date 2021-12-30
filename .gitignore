@@ -41,3 +41,5 @@ local.properties
 
 # Database files
 db.sqlite3
+*.db
+
