@@ -18,8 +18,10 @@ import com.resources.Sale;
 import spark.Request;
 
 public class RequestController {
-	
+	// constants
 	public static final String CONNECTION_TYPE = "PRODUCTION"; // (production/test)
+	
+	// member variables
 	private DatabaseController databaseController = DatabaseController.getInstance();
 	private ResourceFactory resourceFactory = new ResourceFactory();
 	

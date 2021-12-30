@@ -97,7 +97,6 @@ public class WebServer {
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
 			return gson.toJson("status: " + response.status());
 		});
-
 	}
 
 	public void stopWebServer() {

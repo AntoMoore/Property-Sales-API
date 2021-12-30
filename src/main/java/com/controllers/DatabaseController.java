@@ -47,7 +47,7 @@ public class DatabaseController {
 				connectionSource = new JdbcConnectionSource(PRODUCTION_DATABASE_URL);
 			}
 			else {
-				System.out.println("Invalid Connection Type...");
+				System.out.println("Invalid Connection Type, must be TEST or PRODUCTION.");
 				return;
 			}
 			
@@ -87,5 +87,4 @@ public class DatabaseController {
 		TableUtils.dropTable(connectionSource, Property.class, true);
 		TableUtils.dropTable(connectionSource, Sale.class, true);
 	}
-
 }
